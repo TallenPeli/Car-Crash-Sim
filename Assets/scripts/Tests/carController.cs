@@ -11,7 +11,6 @@ public class carController : MonoBehaviour
     public float AccelerationMod;
     public float maxRotationSpeed = 500.0f; // Maximum rotation speed
     public float acceleration = 100.0f; // Acceleration rate
-    private float currentRotationSpeed = 0.0f; // Current rotation speed
     public float DecelerationMod;
     public bool autoLockCursor;
     public float MaximumMovementSpeed = 100f;
