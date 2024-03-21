@@ -1,13 +1,14 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
     public GameObject StartingCanvas;
     public GameObject currectCanvas;
     public Slider FOVslider;
-    public TMP_text FOVField;
+    public TMP_Text FOVtext;
 
     [Header("Settings")]
     public float FOV = 90f;
@@ -23,9 +24,9 @@ public class UIHandler : MonoBehaviour
         canvas.SetActive(true);
     }
 
-    public void ChangeFOVtext()
+    public void ChangeFOV()
     {
-        FOVField.text = string.Format("{0:0.00}", FOVslider.value);
+        FOVtext.text = string.Format("{0}", FOVslider.value);
     }
 
     void Start()
