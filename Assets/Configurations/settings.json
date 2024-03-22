@@ -5,6 +5,7 @@
     "graphicsSettings": {
         "graphicsQuality": 2,
         "ShadowQuality": 1,
-        "HDR_Enabled": false
+        "HDR_Enabled": false,
+        "resolution": "2560 x 1920"
     }
 }

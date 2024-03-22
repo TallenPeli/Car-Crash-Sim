@@ -11,6 +11,7 @@ public class UIHandler : MonoBehaviour
     public Slider FOVslider;
     public TMP_Text FOVtext;
     public GameObject errorMessageText;
+    public Dropdown resolutionsMenu;
 
     [Header("Settings")]
     public float FOV = 90f;
@@ -25,11 +26,15 @@ public class UIHandler : MonoBehaviour
         currectCanvas = canvas;
         canvas.SetActive(true);
     }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 
     public IEnumerator ShowErrorMessage(string errorMessage)
     {
         errorMessageText.SetActive(true);
-        errorMessageText.GetComponent<TMP_Text>().text = errorMessage;
+        errorMessageText.GetComponentInChildren<TMP_Text>().text = errorMessage;
         yield return new WaitForSeconds(5.0f);
         errorMessageText.SetActive(false);
     }
