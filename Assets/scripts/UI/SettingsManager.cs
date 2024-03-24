@@ -24,6 +24,7 @@ public class SettingsManager : MonoBehaviour {
         public CameraSettings cameraSettings;
         public GraphicsSettings graphicsSettings;
         public SystemSettings systemSettings;
+        public AudioSettings audioSettings;
     }
 
     [System.Serializable]
@@ -35,16 +36,25 @@ public class SettingsManager : MonoBehaviour {
     [System.Serializable]
     public class SystemSettings
     {
-        public string OperatingSystem = System.Environment.OSVersion.Platform.ToString();
+        public string operatingSystem = "";
     }
 
     [System.Serializable]
     public class GraphicsSettings
     {
         public int graphicsQuality = 2;
-        public int ShadowQuality = 1;
+        public int shadowQuality = 1;
         public bool HDR_Enabled = false;
         public string resolution;
+    }
+
+    [System.Serializable]
+    public class AudioSettings
+    {
+        public float masterVolume = 100f;
+        public float menuVolume = 100f;
+        public float engineVolume = 100f;
+        public float physicsVolume = 100f;
     }
 
     public void LoadSettings()
@@ -62,11 +72,12 @@ public class SettingsManager : MonoBehaviour {
         try
         {
             File.WriteAllText(filePath, JsonUtility.ToJson(gameSettings, true));
+            StartCoroutine(UIHandler.GetComponent<UIHandler>().ShowStatusMessage($"Settings saved to '{filePath}' Successfully!"));
         }
         catch(Exception e)
         {
             Debug.LogError("Error writing settings file: " + e.Message);
-            StartCoroutine(UIHandler.GetComponent<UIHandler>().ShowErrorMessage("Error. Could not save settings file."));
+            StartCoroutine(UIHandler.GetComponent<UIHandler>().ShowErrorMessage($"Failed to save settings file to '{filePath}'"));
         }
     }
     public void FovChange()
@@ -102,6 +113,7 @@ public class SettingsManager : MonoBehaviour {
             if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
             {
                 currentResolutionIndex = i;
+                gameSettings.graphicsSettings.resolution = options[i];
             }
         }
 
@@ -110,6 +122,8 @@ public class SettingsManager : MonoBehaviour {
 
         resolutionDropdown.value = currentResolutionIndex;
 
+        gameSettings.systemSettings.operatingSystem = operatingSystem;
+        
         if (operatingSystem.Contains("Linux") || operatingSystem.Contains("Unix"))
         {
             // Linux file path
