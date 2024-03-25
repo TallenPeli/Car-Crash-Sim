@@ -768,13 +768,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b1e04e566ee2f68bafa5bfd6e050f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoLockCursor: 1
+  autoLockCursor: 0
   motorTorque: 6000
   brakeTorque: 6000
   maxSpeed: 200
   steeringRange: 15
   steeringRangeAtMaxSpeed: 3
   centreOfGravityOffset: -0.6
+  IsEnabled: 1
 --- !u!54 &2583020368642731090
 Rigidbody:
   m_ObjectHideFlags: 0

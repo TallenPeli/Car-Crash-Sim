@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameHandler : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class GameHandler : MonoBehaviour
     public RawImage DashViewPort;
     List<GameObject> Cameras = new List<GameObject>();
 
+    [Header("Settings")]
+    public GameObject SettingsUI;
+    public Slider FovSlider;
+    public TMP_Text FovSliderText;
+
     // Start is called before the first frame update
     public void InstantiateCar()
     {
@@ -39,15 +45,6 @@ public class GameHandler : MonoBehaviour
     public void ToggleDriving()
     {
         GameObject.Find("CyberTruck(Clone)").GetComponent<CarControl>().IsEnabled = !GameObject.Find("CyberTruck(Clone)").GetComponent<CarControl>().IsEnabled;
-    }
-    void Start()
-    {
-        CurrentCamera = 0;
-        Cameras.Add(ThirdPersonCamera);
-        Cameras.Add(FirstPersonCamera);
-        Cameras.Add(DashCam);
-        Cameras.Add(FreeCam);
-        InstantiateCar();
     }
 
     // Used to change the Dash Cam Viewport to 4:3
@@ -84,6 +81,21 @@ public class GameHandler : MonoBehaviour
             Cameras[CurrentCamera].SetActive(true);
             Cameras[CurrentCamera].transform.SetParent(PlayerLook.transform, false);
         }
+    }
+
+    public void UpdateFOV()
+    {
+        GameObject.FindWithTag("Camera").GetComponent<Camera>().fieldOfView = FovSlider.value;
+        FovSliderText.text = FovSlider.value.ToString();
+    }
+    void Start()
+    {
+        Cameras.Add(ThirdPersonCamera);
+        Cameras.Add(FirstPersonCamera);
+        Cameras.Add(DashCam);
+        Cameras.Add(FreeCam);
+        CurrentCamera = 0;
+        InstantiateCar();
     }
 
     void Update()

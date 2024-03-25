@@ -13,6 +13,7 @@ public class SettingsManager : MonoBehaviour {
     public Settings gameSettings;
     public Camera gameCamera;
     public GameObject UIHandler;
+    public GameObject GameHandler;
     public TMP_Dropdown resolutionDropdown;
     Resolution[] resolutions;
     public int currentResolutionIndex;
@@ -129,18 +130,44 @@ public class SettingsManager : MonoBehaviour {
             // Linux file path
             string username = System.Environment.GetEnvironmentVariable("USER");
             filePath = $"/home/{username}/.car-sim/Configurations/settings.json";
+
+            if(File.Exists(filePath))
+            {
+                LoadSettings();
+            }
+            else
+            {
+                SaveSettings();
+            }
         }
         else if (operatingSystem.Contains("Win"))
         {
             // Windows file path
             string userProfilePath = System.Environment.GetEnvironmentVariable("USERPROFILE");
             filePath = $@"{userProfilePath}\AppData\LocalLow\car-sim\Configurations\settings.json";
+
+            if(File.Exists(filePath))
+            {
+                LoadSettings();
+            }
+            else
+            {
+                SaveSettings();
+            }
         }
         else if (operatingSystem.Contains("Mac"))
         {
             // macOS file path
             string username = System.Environment.GetEnvironmentVariable("USER");
             filePath = $"/Users/{username}/Library/Application Support/car-sim/Configurations/settings.json";
+            if(File.Exists(filePath))
+            {
+                LoadSettings();
+            }
+            else
+            {
+                SaveSettings();
+            }
         }
         else
         {
