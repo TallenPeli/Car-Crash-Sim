@@ -1,3 +1,4 @@
+# Some Unity directories
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -5,6 +6,17 @@
 /[Bb]uilds/
 /.vscode/
 /Assets/AssetStoreTools*
+
+# Vscode Stuff
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Vscode local history
+.history/
 
 # Visual Studio 2015 cache directory
 /.vs/
@@ -23,6 +35,7 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
+*.blob
 
 
 # Unity3D generated meta files
@@ -33,3 +46,6 @@ sysinfo.txt
 
 # Builds
 *.apk
+
+# Built Visual Studio Code Extensions
+*.vsix
