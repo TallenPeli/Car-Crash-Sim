@@ -25,6 +25,8 @@ public class CarControl : MonoBehaviour
     }
     void Update()
     {
+        Cursor.lockState = (autoLockCursor) ? CursorLockMode.Locked : CursorLockMode.None;
+        
         if(IsEnabled)
         {
             float vInput = Input.GetAxis("Vertical");

@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Cinemachine;
 
 public class GameHandler : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class GameHandler : MonoBehaviour
     public GameObject CyberTruck;
     public GameObject StarterCar;
     public GameObject StarterTruck;
+    private GameObject vehicle;
 
     [Header("Camera")]
     public GameObject CameraHolder;
@@ -28,6 +31,7 @@ public class GameHandler : MonoBehaviour
     public GameObject SettingsUI;
     public Slider FovSlider;
     public TMP_Text FovSliderText;
+    private bool IsMenuShowing;
 
     // Start is called before the first frame update
     public void InstantiateCar()
@@ -35,10 +39,21 @@ public class GameHandler : MonoBehaviour
         Cameras[CurrentCamera].transform.SetParent(GameObject.Find("Cameras").transform, false);
         PlayerLook.transform.SetParent(null, false);
         Destroy(GameObject.Find("CyberTruck(Clone)"));
-        GameObject vehicle = Instantiate(CyberTruck, CarSpawn.transform.position, CarSpawn.transform.rotation);
+        vehicle = Instantiate(CyberTruck, CarSpawn.transform.position, CarSpawn.transform.rotation);
         PlayerLook.transform.SetParent(vehicle.transform, false);
         vehicle.GetComponent<CarControl>().IsEnabled = true;
+        vehicle.GetComponent<CarControl>().autoLockCursor = !IsMenuShowing;
         SwitchCamera(CurrentCamera);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     // Toggle the car's controller script
@@ -85,17 +100,26 @@ public class GameHandler : MonoBehaviour
 
     public void UpdateFOV()
     {
-        GameObject.FindWithTag("Camera").GetComponent<Camera>().fieldOfView = FovSlider.value;
+        FirstPersonCamera.GetComponent<Camera>().fieldOfView = FovSlider.value;
+        FreeCam.GetComponent<Camera>().fieldOfView = FovSlider.value;
         FovSliderText.text = FovSlider.value.ToString();
     }
     void Start()
     {
+        IsMenuShowing = false;
         Cameras.Add(ThirdPersonCamera);
         Cameras.Add(FirstPersonCamera);
         Cameras.Add(DashCam);
         Cameras.Add(FreeCam);
         CurrentCamera = 0;
         InstantiateCar();
+    }
+
+    public void SettingOverlay()
+    {
+        IsMenuShowing = !IsMenuShowing;
+        SettingsUI.SetActive(!SettingsUI.activeSelf);
+        vehicle.GetComponent<CarControl>().autoLockCursor = !vehicle.GetComponent<CarControl>().autoLockCursor;
     }
 
     void Update()
@@ -123,6 +147,10 @@ public class GameHandler : MonoBehaviour
         {
             SwitchCamera(3);
             UpdateDashCamView();
+        }
+        if(Input.GetKeyDown("escape"))
+        {
+            SettingOverlay();
         }
 
     }

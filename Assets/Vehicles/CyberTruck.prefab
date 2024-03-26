@@ -768,7 +768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b1e04e566ee2f68bafa5bfd6e050f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoLockCursor: 0
+  autoLockCursor: 1
   motorTorque: 6000
   brakeTorque: 6000
   maxSpeed: 200
