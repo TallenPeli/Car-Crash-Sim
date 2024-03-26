@@ -38,7 +38,7 @@ public class GameHandler : MonoBehaviour
     {
         Cameras[CurrentCamera].transform.SetParent(GameObject.Find("Cameras").transform, false);
         PlayerLook.transform.SetParent(null, false);
-        Destroy(GameObject.Find("CyberTruck(Clone)"));
+        Destroy(vehicle);
         vehicle = Instantiate(CyberTruck, CarSpawn.transform.position, CarSpawn.transform.rotation);
         PlayerLook.transform.SetParent(vehicle.transform, false);
         vehicle.GetComponent<CarControl>().IsEnabled = true;
@@ -59,7 +59,7 @@ public class GameHandler : MonoBehaviour
     // Toggle the car's controller script
     public void ToggleDriving()
     {
-        GameObject.Find("CyberTruck(Clone)").GetComponent<CarControl>().IsEnabled = !GameObject.Find("CyberTruck(Clone)").GetComponent<CarControl>().IsEnabled;
+        vehicle.GetComponent<CarControl>().IsEnabled = !vehicle.GetComponent<CarControl>().IsEnabled;
     }
 
     // Used to change the Dash Cam Viewport to 4:3
@@ -124,7 +124,7 @@ public class GameHandler : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown("space") && GameObject.Find("CyberTruck(Clone)").GetComponent<CarControl>().IsEnabled)
+        if(Input.GetKeyDown("space") && vehicle.GetComponent<CarControl>().IsEnabled)
         {
             InstantiateCar();
         }
