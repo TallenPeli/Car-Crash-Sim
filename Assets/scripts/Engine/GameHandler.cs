@@ -102,6 +102,7 @@ public class GameHandler : MonoBehaviour
     {
         FirstPersonCamera.GetComponent<Camera>().fieldOfView = FovSlider.value;
         FreeCam.GetComponent<Camera>().fieldOfView = FovSlider.value;
+        ThirdPersonCamera.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = FovSlider.value;
         FovSliderText.text = FovSlider.value.ToString();
     }
     void Start()

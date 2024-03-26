@@ -21,7 +21,6 @@ public class CarControl : MonoBehaviour
         rigidBody.centerOfMass += Vector3.up * centreOfGravityOffset;
 
         wheels = GetComponentsInChildren<WheelControl>();
-        Cursor.lockState = (autoLockCursor) ? CursorLockMode.Locked : CursorLockMode.None;
     }
     void Update()
     {
