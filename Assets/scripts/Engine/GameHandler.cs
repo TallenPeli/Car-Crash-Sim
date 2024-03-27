@@ -33,6 +33,10 @@ public class GameHandler : MonoBehaviour
     public Slider FovSlider;
     public TMP_Text FovSliderText;
     private bool IsMenuShowing;
+    public TMP_Dropdown resolutionDropdown;
+    Resolution[] resolutions;
+    public int currentResolutionIndex;
+    public TMP_Text speedometer;
 
     // Start is called before the first frame update
     public void InstantiateCar(GameObject playerVehicle, Vector3 playerLocation, Quaternion playerRotation, Vector3 playerVelocity, Vector3 playerAngularVelocity)
@@ -63,13 +67,6 @@ public class GameHandler : MonoBehaviour
     public void ToggleDriving()
     {
         vehicle.GetComponent<CarControl>().IsEnabled = !vehicle.GetComponent<CarControl>().IsEnabled;
-    }
-
-    // Used to change the Dash Cam Viewport to 4:3
-    private void UpdateDashCamView()
-    {
-        DashViewPort.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.currentResolution.height * (4f / 3f), Screen.currentResolution.height);
-        Debug.Log(Screen.currentResolution.height*(4/3));
     }
 
     public void SwitchCamera(int camera)
@@ -108,8 +105,16 @@ public class GameHandler : MonoBehaviour
         ThirdPersonCamera.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = FovSlider.value;
         FovSliderText.text = FovSlider.value.ToString();
     }
-    void Start()
+
+    public void SetResolution(int resolutionIndex)
     {
+        Resolution resolution = resolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        UpdateDashCamView();
+    }
+
+    void Start()
+    {   // Vehicle Setup stuff
         CurrentCar = CyberTruck;
         IsMenuShowing = false;
         Cameras.Add(ThirdPersonCamera);
@@ -118,6 +123,36 @@ public class GameHandler : MonoBehaviour
         Cameras.Add(FreeCam);
         CurrentCamera = 0;
         InstantiateCar(CurrentCar, CarSpawn.transform.position, CarSpawn.transform.rotation, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f));
+
+        // Setting up the resolutions menu
+        resolutionDropdown.ClearOptions();
+        List<string> options = new List<string>();
+        resolutions = Screen.resolutions;
+        int currentResolutionIndex = 0;
+
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
+            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResolutionIndex = i;
+            }
+        }
+
+        resolutionDropdown.AddOptions(options);
+        resolutionDropdown.RefreshShownValue();
+
+        resolutionDropdown.value = currentResolutionIndex;
+        
+        SetResolution(currentResolutionIndex);
+    }
+
+    // Used to change the Dash Cam Viewport to 4:3
+    private void UpdateDashCamView()
+    {
+        DashViewPort.GetComponent<RectTransform>().sizeDelta = new Vector2(resolutions[currentResolutionIndex].height * (4f / 3f), resolutions[currentResolutionIndex].height);
+        Debug.Log(Screen.currentResolution.height*(4/3));
     }
 
     public void SettingOverlay()
@@ -172,6 +207,8 @@ public class GameHandler : MonoBehaviour
             CurrentCar = CyberTruck;
             InstantiateCar(CurrentCar, vehicle.transform.position, vehicle.transform.rotation, vehicle.GetComponent<Rigidbody>().velocity, vehicle.GetComponent<Rigidbody>().angularVelocity);
         }
+
+        speedometer.text = Mathf.Abs(Vector3.Dot(vehicle.transform.forward, vehicle.GetComponent<Rigidbody>().velocity)).ToString("000") + " km/h";
 
     }
 }
