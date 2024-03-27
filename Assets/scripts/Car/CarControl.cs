@@ -58,7 +58,7 @@ public class CarControl : MonoBehaviour
                 }
                 else
                 {
-                    wheel.WheelCollider.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
+                    wheel.WheelCollider.brakeTorque = brakeTorque;
                     wheel.WheelCollider.motorTorque = 0;
                 }
             }

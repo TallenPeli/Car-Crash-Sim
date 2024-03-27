@@ -14,6 +14,7 @@ public class GameHandler : MonoBehaviour
     public GameObject StarterCar;
     public GameObject StarterTruck;
     private GameObject vehicle;
+    private GameObject CurrentCar;
 
     [Header("Camera")]
     public GameObject CameraHolder;
@@ -34,15 +35,17 @@ public class GameHandler : MonoBehaviour
     private bool IsMenuShowing;
 
     // Start is called before the first frame update
-    public void InstantiateCar()
+    public void InstantiateCar(GameObject playerVehicle, Vector3 playerLocation, Quaternion playerRotation, Vector3 playerVelocity, Vector3 playerAngularVelocity)
     {
         Cameras[CurrentCamera].transform.SetParent(GameObject.Find("Cameras").transform, false);
         PlayerLook.transform.SetParent(null, false);
         Destroy(vehicle);
-        vehicle = Instantiate(CyberTruck, CarSpawn.transform.position, CarSpawn.transform.rotation);
+        vehicle = Instantiate(playerVehicle, playerLocation, playerRotation);
         PlayerLook.transform.SetParent(vehicle.transform, false);
         vehicle.GetComponent<CarControl>().IsEnabled = true;
         vehicle.GetComponent<CarControl>().autoLockCursor = !IsMenuShowing;
+        vehicle.GetComponent<Rigidbody>().velocity = playerVelocity;
+        vehicle.GetComponent<Rigidbody>().angularVelocity = playerAngularVelocity;
         SwitchCamera(CurrentCamera);
     }
 
@@ -107,13 +110,14 @@ public class GameHandler : MonoBehaviour
     }
     void Start()
     {
+        CurrentCar = CyberTruck;
         IsMenuShowing = false;
         Cameras.Add(ThirdPersonCamera);
         Cameras.Add(FirstPersonCamera);
         Cameras.Add(DashCam);
         Cameras.Add(FreeCam);
         CurrentCamera = 0;
-        InstantiateCar();
+        InstantiateCar(CurrentCar, CarSpawn.transform.position, CarSpawn.transform.rotation, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f));
     }
 
     public void SettingOverlay()
@@ -127,7 +131,7 @@ public class GameHandler : MonoBehaviour
     {
         if(Input.GetKeyDown("space") && vehicle.GetComponent<CarControl>().IsEnabled)
         {
-            InstantiateCar();
+            InstantiateCar(CurrentCar, CarSpawn.transform.position, CarSpawn.transform.rotation, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f));
         }
 
         if(Input.GetKeyDown("1"))
@@ -152,6 +156,21 @@ public class GameHandler : MonoBehaviour
         if(Input.GetKeyDown("escape"))
         {
             SettingOverlay();
+        }
+        if(Input.GetKeyDown("j"))
+        {
+            CurrentCar = StarterCar;
+            InstantiateCar(CurrentCar, vehicle.transform.position, vehicle.transform.rotation, vehicle.GetComponent<Rigidbody>().velocity, vehicle.GetComponent<Rigidbody>().angularVelocity);
+        }
+        if(Input.GetKeyDown("k"))
+        {
+            CurrentCar = StarterTruck;
+            InstantiateCar(CurrentCar, vehicle.transform.position, vehicle.transform.rotation, vehicle.GetComponent<Rigidbody>().velocity, vehicle.GetComponent<Rigidbody>().angularVelocity);
+        }
+        if(Input.GetKeyDown("l"))
+        {
+            CurrentCar = CyberTruck;
+            InstantiateCar(CurrentCar, vehicle.transform.position, vehicle.transform.rotation, vehicle.GetComponent<Rigidbody>().velocity, vehicle.GetComponent<Rigidbody>().angularVelocity);
         }
 
     }
